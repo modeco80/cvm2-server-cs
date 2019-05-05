@@ -79,8 +79,8 @@ namespace CollabVM
 
         protected override void OnOpen()
         {
-            // Block non-NVM2 connnections
-            if (!Context.SecWebSocketProtocols.Contains("nvm2"))
+            // Block non-CollabVM connnections
+            if (!Context.SecWebSocketProtocols.Contains("cvm2"))
             {
                 Sessions.CloseSession(ID);
                 return;

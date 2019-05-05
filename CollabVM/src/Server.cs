@@ -40,7 +40,7 @@ namespace CollabVM
             Logger.Log("Server: Starting the server on :" + this.config.port + "...");
             WebSocketServer ws = new WebSocketServer(this.config.port);
             ws.Log.Level = LogLevel.Fatal;
-            WSBehavior wb = new WSBehavior() { Protocol = "nvm2", IgnoreExtensions = true };
+            WSBehavior wb = new WSBehavior() { Protocol = "cvm2", IgnoreExtensions = true };
             ws.AddWebSocketService("/", () => wb);
 
             ws.Start();
