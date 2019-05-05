@@ -4,44 +4,27 @@ using System.Text;
 
 namespace CollabVM
 {
-    class ProtocolInstruction
-    {
-        public string instruction;
-        public List<string> arguments;
-    }
 
     static class ProtocolCodec
     {
 
-        public static string Encode(ProtocolInstruction cypher)
+        public static string Encode(params string[] cypher)
         {
             StringBuilder command = new StringBuilder("");
-            command.Append(cypher.instruction.Length.ToString());
-            command.Append('.');
-            command.Append(cypher.instruction);
-            if (cypher.arguments.Count != 0)
+            for (int i = 0; i < cypher.Length; i++)
             {
-                command.Append(',');
-                for (int i = 0; i < cypher.arguments.Count; i++)
-                {
-                    var current = cypher.arguments[i];
-                    command.Append(current.Length.ToString());
-                    command.Append('.');
-                    command.Append(current);
-                    command.Append(i < cypher.arguments.Count - 1 ? ',' : ';');
-                }
-            }
-            else
-            {
-                command.Append(';');
+                var current = cypher[i];
+                command.Append(current.Length.ToString());
+                command.Append('.');
+                command.Append(current);
+                command.Append(i < cypher.Length - 1 ? ',' : ';');
             }
             return command.ToString();
         }
 
-        public static ProtocolInstruction Decode(string str)
+        public static string[] Decode(string str)
         {
             int pos = -1;
-            string instruction = "";
             List<string> sections = new List<string>();
 
             for (; ; )
@@ -58,23 +41,12 @@ namespace CollabVM
                     .Replace("&lt;", "<")
                     .Replace("&gt;", ">")
                     .Replace("&amp;", "&");
-                if (instruction != "")
-                {
-                    sections.Add(repl.ToString());
-                }
-                else
-                {
-                    instruction = repl.ToString();
-                }
+                sections.Add(repl.ToString());
 
                 if (str.Substring(pos, 1) == ";")
                     break;
             }
-            return new ProtocolInstruction()
-            {
-                instruction = instruction,
-                arguments = sections
-            };
+            return sections.ToArray();
         }
     }
 }

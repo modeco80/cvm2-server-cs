@@ -3,6 +3,7 @@ using System.Timers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -13,15 +14,22 @@ namespace CollabVM
     {
         private List<User> users;
         private List<VirtualMachine> virtualMachines;
-        private Timer serverTimer;
+        private System.Timers.Timer serverTimer;
 
         public WSBehavior()
         {
             users = new List<User>();
             virtualMachines = new List<VirtualMachine>();
 
-            serverTimer = new Timer(175);
-            serverTimer.Elapsed += ActionTimerElapsed;
+            serverTimer = new System.Timers.Timer(150);
+            serverTimer.Elapsed += (src, e) =>
+            {
+                // Start a new thread to work on user action queues
+                new Thread(() =>
+                {
+                    ActionWork();
+                }).Start();
+            };
             serverTimer.AutoReset = true;
             serverTimer.Enabled = true;
 
@@ -39,16 +47,16 @@ namespace CollabVM
             Sessions.CloseSession(ID);
         }
 
-        private void ActionTimerElapsed(Object source, ElapsedEventArgs e)
+        private void ActionWork()
         {
             foreach (User u in users)
             {
-                Logger.Log("hih " + u.id + " " + u.ActionQueue.Count);
-
+                // Process the action queue if it's not blank
                 while (u.ActionQueue.Count != 0)
                 {
-                    Logger.Log("hih shus");
                     Action act = u.ActionQueue.Dequeue();
+                    if (act == null) break;
+                    if (act.inst == null) break;
                     u.sockhandle.Send(ProtocolCodec.Encode(act.inst));
                 }
             }
@@ -57,22 +65,20 @@ namespace CollabVM
         protected override void OnMessage(MessageEventArgs e)
         {
             User u = GetUserFromID(ID);
+
             if (u != null)
             {
-                /*
-                    ProtocolInstruction inst = ProtocolCodec.Decode(e.Data);
-                    switch (inst.instruction)
-                    {
-                        default: break;
+                // Action queueing test. It's not fun but it works ok
+
+                Action a = new Action
+                {
+                    inst = new string[] { "test", "please wait" }
+                };
+                Logger.Log("hi " + a.inst[0]);
 
 
-                    }
-                    */
-
-                Action a = new Action() { inst = new ProtocolInstruction() { instruction = "chat", arguments = { "modeco80", "cbt" } } };
-                Logger.Log("enquing");
                 u.ActionQueue.Enqueue(a);
-                Logger.Log("enqueued " + u.ActionQueue.Peek().inst.instruction);
+
             }
 
         }

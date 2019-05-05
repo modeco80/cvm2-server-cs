@@ -19,8 +19,6 @@ namespace CollabVM
             Error
         };
 
-        public static void NewLine() => Console.Write("\n");
-
         public static void Log(string message, Severity sev = Severity.Info)
         {
             switch (sev)
@@ -41,14 +39,16 @@ namespace CollabVM
                     Console.ForegroundColor = ConsoleColor.Gray;
                     break;
 
-                case Severity.Error: {
+                case Severity.Error:
+                    {
                         StackFrame frame = new StackFrame(1);
                         MethodBase method = frame.GetMethod();
 
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("[Error] {0}(): {1}", method.DeclaringType.Name + "." + method.Name, message);
                         Console.ForegroundColor = ConsoleColor.Gray;
-                } break;
+                    }
+                    break;
 
             }
 

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CollabVM Server")]
-[assembly: AssemblyCopyright("Copyright © 2019 Mode CO80 Technologies Under the GNU AGPL v3")]
+[assembly: AssemblyCopyright("Copyright © 2019 Computernewb Development Team")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

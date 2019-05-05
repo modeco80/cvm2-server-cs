@@ -12,16 +12,16 @@ namespace CollabVM
 {
     enum VoteChoices
     {
-        kNotDecided,
-        kNo,
-        kYes
+        NotDecided,
+        No,
+        Yes
     }
 
     // IP information for each user
     class IPInfo
     {
         private IPAddress ip;
-        public VoteChoices vote = VoteChoices.kNotDecided;
+        public VoteChoices vote = VoteChoices.NotDecided;
 
         public IPInfo(IPAddress ip)
         {
@@ -33,18 +33,22 @@ namespace CollabVM
 
     class Action
     {
-        public ProtocolInstruction inst;
+        public string[] inst;
     }
 
-    // User object.
+    // User data, contains socket handle and virtual machine user is looking at.
     class User
     {
         public IPInfo ipi;
         public WebSocket sockhandle;
         public string id;
-        private string username;
+        public string username = "";
+
         public bool controlling = false;
-        public VirtualMachine Vm { get; set; }
+
+        // If controlling is false this should always be expected to be null.
+        // Otherwise the VM the user is on is here.
+        public VirtualMachine vm = null;
 
         public Queue<Action> ActionQueue = new Queue<Action>();
 
@@ -57,9 +61,5 @@ namespace CollabVM
 
         }
 
-        // I know properties are a thing but fuck you Harold
-        // I can do what I damn well please
-        public void SetUsername(string username) => this.username = username;
-        public string GetUsername => username;
     }
 }
