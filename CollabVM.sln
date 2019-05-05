@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHVPlugin", "TestHVPlugi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{62193596-43BD-4D36-9086-82CE34941639}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VM ContRollers", "VM ContRollers", "{E8FCE11E-7C4E-4BC5-AD27-1CA13D87CD42}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VM Controllers", "VM Controllers", "{E8FCE11E-7C4E-4BC5-AD27-1CA13D87CD42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,7 +15,7 @@ namespace CollabVM
 
         static void Main(string[] args)
         {
-            Logger.Log("NeptuneVM 2.0, (C) 2019 ModeCo80.", Logger.Severity.Logo);
+            Logger.Log("CollabVM Server 2.0, (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
             Logger.Log("Initalizing VM Controller plugins...");
             vms = new Dictionary<string, IVirtualMachineController>();
             LoadPlugins();
@@ -53,7 +53,6 @@ namespace CollabVM
                 {
                     if (IsControllerInterface(t))
                     {
-                        Logger.Log("Found controller class \"" + t.FullName + "\" in " + pluginPath);
                         object pluginInstance = Activator.CreateInstance(t);
                         try
                         {
