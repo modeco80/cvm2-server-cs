@@ -10,6 +10,7 @@ using WebSocketSharp.Server;
 
 namespace CollabVM
 {
+    // The possible choices for a vote.
     enum VoteChoices
     {
         NotDecided,

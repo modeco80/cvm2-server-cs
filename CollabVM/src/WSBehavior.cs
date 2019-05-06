@@ -10,6 +10,7 @@ using WebSocketSharp.Server;
 
 namespace CollabVM
 {
+    // The WebSocket server behavior
     class WSBehavior : WebSocketBehavior
     {
         private List<User> users;
@@ -35,23 +36,32 @@ namespace CollabVM
 
         }
 
+        // Get a user from a WebSocket id.
         private User GetUserFromID(string id)
         {
             return users.Find(x => x.id == id);
         }
 
+        // Right now this function just cleans up *our* user pool.
+        // Later we'll need to remove stuff from virtual machines in order
+        // to stop the chance of nullrefs
+        private void CleanupUser(string id)
+        {
+            users.RemoveAll(pool => pool == GetUserFromID(ID));
+        }
+
         protected override void OnClose(CloseEventArgs e)
         {
             Logger.Log($"[ IP {GetUserFromID(ID).ipi.GetIP()} ] Connection closed");
-            users.RemoveAll(pool => pool == GetUserFromID(ID));
-            Sessions.CloseSession(ID);
+            CleanupUser(ID);
         }
 
+        // This function processes the action queue for all connected users.
         private void ActionWork()
         {
             foreach (User u in users)
             {
-                // Process the action queue if it's not blank
+                // Process the action queue if it's not blank.
                 while (u.ActionQueue.Count != 0)
                 {
                     Action act = u.ActionQueue.Dequeue();
@@ -62,6 +72,7 @@ namespace CollabVM
             }
         }
 
+        // Firef on a WebSocket message.
         protected override void OnMessage(MessageEventArgs e)
         {
             User u = GetUserFromID(ID);
@@ -83,6 +94,7 @@ namespace CollabVM
 
         }
 
+        // Fired when a client first connects.
         protected override void OnOpen()
         {
             // Block non-CollabVM connnections
@@ -94,9 +106,8 @@ namespace CollabVM
 
 
             users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
-            Context.WebSocket.Send("hi");
             Logger.Log($"[ IP {GetUserFromID(ID).ipi.GetIP()} ] Connection opened");
-
+            // TODO: we might want to send a hello packet too
         }
     }
 }

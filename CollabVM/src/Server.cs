@@ -11,6 +11,7 @@ using WebSocketSharp.Server;
 namespace CollabVM
 {
 
+    // Server configuration data
     class ServerConfig
     {
         public int port;
@@ -21,6 +22,7 @@ namespace CollabVM
         }
     }
 
+    // The server class.
     class Server
     {
 
@@ -39,7 +41,7 @@ namespace CollabVM
         {
             Logger.Log("Server: Starting the server on :" + this.config.port + "...");
             WebSocketServer ws = new WebSocketServer(this.config.port);
-            ws.Log.Level = LogLevel.Fatal;
+            ws.Log.Level = LogLevel.Warn;
             WSBehavior wb = new WSBehavior() { Protocol = "cvm2", IgnoreExtensions = true };
             ws.AddWebSocketService("/", () => wb);
 

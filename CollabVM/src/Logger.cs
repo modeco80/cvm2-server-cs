@@ -34,7 +34,7 @@ namespace CollabVM
                     break;
 
                 case Severity.Warning:
-                    Console.ForegroundColor = ConsoleColor.DarkYellow; // dehydraded piss yellow is the best piss yellow
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("[Warning] {0}", message);
                     Console.ForegroundColor = ConsoleColor.Gray;
                     break;

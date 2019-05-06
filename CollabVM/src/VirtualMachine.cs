@@ -5,10 +5,10 @@ using PluginInterface;
 namespace CollabVM
 {
 
-
-
+    // A repressentation of a virtual machine.
     public class VirtualMachine
     {
+        List<User> users; // All users this VM has.
         public string id { get; set; }
         private IVirtualMachineController vmc;
 
@@ -18,12 +18,14 @@ namespace CollabVM
             this.vmc.OnDisplayUpdate += this.OnDisplayUpdate;
         }
 
+        // Starts this VM.
         public void Start()
         {
             Logger.Log("VirtualMachine: Starting VM id " + id);
             vmc.Start();
         }
 
+        // Fired when the IVirtualMachineController sends a new display chunk.
         public void OnDisplayUpdate(object sender, DisplayUpdateArgs e)
         {
             // TODO: 
