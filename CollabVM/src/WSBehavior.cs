@@ -72,7 +72,7 @@ namespace CollabVM
             }
         }
 
-        // Firef on a WebSocket message.
+        // Fired on a WebSocket message.
         protected override void OnMessage(MessageEventArgs e)
         {
             User u = GetUserFromID(ID);
