@@ -11,7 +11,7 @@ namespace TestVMPlugin
     public class TestVM : IVirtualMachineController
     {
         string IVirtualMachineController.Name { get { return "testvm"; } }
-        string IVirtualMachineController.Description { get { return "Sample Hypervisor Plugin"; } }
+        string IVirtualMachineController.Description { get { return "Sample VM Controller Plugin"; } }
         string IVirtualMachineController.Author { get { return "Modeco80 / Computernewb Development Team"; } }
 
         private bool started = false;
