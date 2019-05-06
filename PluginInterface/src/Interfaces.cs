@@ -28,13 +28,15 @@ namespace PluginInterface
         string Description { get; } // Ex.: QEMU Virtual Machine Plugin
         string Author { get; } //Ex.: modeco80
 
+
         void Start();
+        bool IsStarted();
         void Stop();
         void Restore();
 
         void SendKey(int keysym);
         void MouseMove(int x, int y);
 
-        event EventHandler<DisplayUpdateArgs> OnDisplayUpdate;
+        event EventHandler<DisplayUpdateArgs> DisplayUpdate;
     }
 }

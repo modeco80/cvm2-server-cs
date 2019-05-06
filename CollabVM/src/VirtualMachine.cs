@@ -15,7 +15,7 @@ namespace CollabVM
         public VirtualMachine(IVirtualMachineController vmc)
         {
             this.vmc = vmc;
-            this.vmc.OnDisplayUpdate += this.OnDisplayUpdate;
+            this.vmc.DisplayUpdate += this.OnDisplayUpdate;
         }
 
         // Starts this VM.
@@ -28,7 +28,7 @@ namespace CollabVM
         // Fired when the IVirtualMachineController sends a new display chunk.
         public void OnDisplayUpdate(object sender, DisplayUpdateArgs e)
         {
-            // TODO: 
+            // TODO: process this 
             Logger.Log("Oops where the fuck did I put the display");
         }
     }
