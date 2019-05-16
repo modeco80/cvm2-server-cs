@@ -9,7 +9,7 @@ using PluginInterface;
 namespace DebugPlugin
 {
     public class DebugController : IVirtualMachineController
-    {//TODO: cock ass
+    {
         string IVirtualMachineController.Name { get { return "ass"; } }
         string IVirtualMachineController.Description { get { return "ass"; } }
         string IVirtualMachineController.Author { get { return "ass"; } }
@@ -52,7 +52,7 @@ namespace DebugPlugin
             OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map, x = 0, y = 0, width = 800, height = 600 });
         }
 
-        void IVirtualMachineController.MouseMove(int x, int y)
+        void IVirtualMachineController.SendMouse(int x, int y, int ms)
         {
             g.FillRectangle(Brushes.Black, x - 1, y - 1, 3, 3);
             OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map, x = 0, y = 0, width = 800, height = 600 });

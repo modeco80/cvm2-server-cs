@@ -11,7 +11,7 @@ using WebSocketSharp.Server;
 namespace CollabVM
 {
     // The possible choices for a vote.
-    enum VoteChoices
+    public enum VoteChoices
     {
         NotDecided,
         No,
@@ -19,7 +19,7 @@ namespace CollabVM
     }
 
     // IP information for each user
-    class IPInfo
+    public class IPInfo
     {
         private IPAddress ip;
         public VoteChoices vote = VoteChoices.NotDecided;
@@ -32,25 +32,27 @@ namespace CollabVM
         public string GetIP() => this.ip.ToString();
     }
 
-    class Action
+    // Action data
+    public class Action
     {
         public string[] inst;
     }
 
     // User data, contains socket handle and virtual machine user is looking at.
-    class User
+    public class User
     {
         public IPInfo ipi;
         public WebSocket sockhandle;
         public string id;
         public string username = "";
 
-        public bool controlling = false;
+        public bool connected = false;
 
-        // If controlling is false this should always be expected to be null.
+        // If connected is false this should always be expected to be null.
         // Otherwise the VM the user is on is here.
         public VirtualMachine vm = null;
 
+        // Queue of actions this user has.
         public Queue<Action> ActionQueue = new Queue<Action>();
 
 

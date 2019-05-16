@@ -15,6 +15,7 @@ namespace CollabVM
     class ServerConfig
     {
         public int port;
+        public Dictionary<string, VirtualMachine> vms = new Dictionary<string, VirtualMachine>();
 
         public ServerConfig(int port)
         {
@@ -40,13 +41,15 @@ namespace CollabVM
         public void Start()
         {
             Logger.Log("Server: Starting the server on :" + this.config.port + "...");
+            // TODO: do thing and thingy thongy
+            //       translation: "make virtual machines from config file"
 
             WebSocketServer ws = new WebSocketServer(this.config.port);
             ws.Log.Level = LogLevel.Error;
-            WSBehavior wb = new WSBehavior() { Protocol = "cvm2", IgnoreExtensions = true };
+            WSBehavior wb = new WSBehavior(this.config.vms) { Protocol = "cvm2", IgnoreExtensions = true };
             ws.AddWebSocketService("/", () => wb);
-
             ws.Start();
+
             while (ws.IsListening)
             {
                 // I didn't want to use Console.ReadKey()

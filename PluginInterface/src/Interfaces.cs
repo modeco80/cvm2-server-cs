@@ -21,6 +21,25 @@ namespace PluginInterface
         public Bitmap displayData;
     }
 
+    public class ConfigInfo
+    {
+        #region vnc 
+        public string VNCAddress = "";
+        public string VNCPasswd = "";
+        #endregion
+        // TODO: handle other thingys
+    }
+
+    public enum MouseStates
+    {
+        Nop,
+        LeftClick = 1,
+        RightClick = 2,
+        MiddleClick = 4,
+        WheelUp = 8,
+        WheelDn = 16
+    }
+
     public interface IVirtualMachineController
     {
         // Human identifiable data
@@ -35,7 +54,7 @@ namespace PluginInterface
         void Restore();
 
         void SendKey(int keysym);
-        void MouseMove(int x, int y);
+        void SendMouse(int x, int y, int ms);
 
         event EventHandler<DisplayUpdateArgs> DisplayUpdate;
     }

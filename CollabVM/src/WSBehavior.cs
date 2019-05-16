@@ -14,13 +14,13 @@ namespace CollabVM
     class WSBehavior : WebSocketBehavior
     {
         private List<User> users;
-        private List<VirtualMachine> virtualMachines;
+        private Dictionary<string, VirtualMachine> virtualMachines;
         private System.Timers.Timer serverTimer;
 
-        public WSBehavior()
+        public WSBehavior(Dictionary<string, VirtualMachine> vms)
         {
             users = new List<User>();
-            virtualMachines = new List<VirtualMachine>();
+            virtualMachines = vms;
 
             serverTimer = new System.Timers.Timer(150);
             serverTimer.Elapsed += (src, e) =>
@@ -47,6 +47,12 @@ namespace CollabVM
         // to stop the chance of nullrefs
         private void CleanupUser(string id)
         {
+            /*
+                foreach(KeyValuePair<string,VirtualMachine> v in virtualMachines){
+                    VirtualMachine vm = v.Value;
+                    if(vm == GetUserFromID(ID).vm) vm.DisconnectUser(GetUserFromID(ID));
+                 }
+            */
             users.RemoveAll(pool => pool == GetUserFromID(ID));
         }
 
@@ -72,26 +78,23 @@ namespace CollabVM
             }
         }
 
+        private void OnWS(User u, string message)
+        {
+
+
+        }
+
         // Fired on a WebSocket message.
         protected override void OnMessage(MessageEventArgs e)
         {
             User u = GetUserFromID(ID);
-
             if (u != null)
             {
-                // Action queueing test. It's not fun but it works ok
-
-                Action a = new Action
+                new Thread(() =>
                 {
-                    inst = new string[] { "test", "please wait" }
-                };
-                Logger.Log("hi " + a.inst[0]);
-
-
-                u.ActionQueue.Enqueue(a);
-
+                    OnWS(u, e.Data);
+                }).Start();
             }
-
         }
 
         // Fired when a client first connects.

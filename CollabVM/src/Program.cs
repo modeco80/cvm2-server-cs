@@ -15,10 +15,11 @@ namespace CollabVM
 
         static void Main(string[] args)
         {
-            Logger.Log("CollabVM Server 2.0, (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
-            Logger.Log("Initalizing VM Controller plugins...");
             vms = new Dictionary<string, IVirtualMachineController>();
             LoadPlugins();
+            Logger.Log("CollabVM Server 2.0, (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
+            Logger.Log("Initalizing VM Controller plugins...");
+            // TODO: load configuration
             Logger.Log("Initalizing server...");
             Server srv = new Server(vms, new ServerConfig(9090)); // TODO
             srv.Start();

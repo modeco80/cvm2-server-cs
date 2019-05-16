@@ -54,7 +54,7 @@ namespace TestVMPlugin
 
         }
 
-        void IVirtualMachineController.MouseMove(int x, int y)
+        void IVirtualMachineController.SendMouse(int x, int y, int ms)
         {
 
         }
@@ -65,8 +65,8 @@ namespace TestVMPlugin
         }
 
         event EventHandler<DisplayUpdateArgs> TestHvDispUpd;
-        private object event_lock = new object();
 
+        private object event_lock = new object();
         event EventHandler<DisplayUpdateArgs> IVirtualMachineController.DisplayUpdate
         {
             add
@@ -85,5 +85,6 @@ namespace TestVMPlugin
                 }
             }
         }
+
     }
 }
