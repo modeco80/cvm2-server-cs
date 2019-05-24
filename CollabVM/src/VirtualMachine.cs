@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Collections.Generic;
 using PluginInterface;
 
@@ -12,8 +15,9 @@ namespace CollabVM
         public string id { get; set; }
         private IVirtualMachineController vmc;
 
-        public VirtualMachine(IVirtualMachineController vmc)
+        public VirtualMachine(IVirtualMachineController vmc, string id)
         {
+            this.id = id;
             this.vmc = vmc;
             this.vmc.DisplayUpdate += this.OnDisplayUpdate;
         }
@@ -47,11 +51,17 @@ namespace CollabVM
             vmc.Restore();
         }
 
+        public void MouseMove(int x, int y)
+        {
+            vmc.SendMouse(x, y, 0);
+        }
+
         public void ConnectUser(User u)
         {
             u.connected = true;
             u.vm = this;
             users.Add(u);
+            vmc.ForceDisplayUpdate();
         }
 
         public void DisconnectUser(User u)
@@ -61,13 +71,33 @@ namespace CollabVM
             users.RemoveAll(x => x == u);
         }
 
+        private static MemoryStream EncodeBitmapToPNG(Bitmap bm)
+        {
+            MemoryStream ms = new MemoryStream();
+            Image im = bm;
+            im.Save(ms, ImageFormat.Png);
+            ms.Position = 0;
+            return ms;
+        }
+
         // Fired when the IVirtualMachineController sends a new display chunk.
         public void OnDisplayUpdate(object sender, DisplayUpdateArgs e)
         {
             foreach (User u in users)
             {
                 if (!u.connected) continue; // FUCK
+                MemoryStream png = EncodeBitmapToPNG(e.displayData);
 
+                u.ActionQueue.Enqueue(new Action
+                {
+                    inst = new string[] {
+                    "rect", e.x.ToString(), e.y.ToString(), e.width.ToString(), e.height.ToString()
+                }
+                });
+
+                u.ActionQueue.Enqueue(new Action { binaryData = png.ToArray() });
+
+                png.Dispose();
             }
         }
     }

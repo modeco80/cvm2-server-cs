@@ -10,9 +10,9 @@ namespace DebugPlugin
 {
     public class DebugController : IVirtualMachineController
     {
-        string IVirtualMachineController.Name { get { return "ass"; } }
-        string IVirtualMachineController.Description { get { return "ass"; } }
-        string IVirtualMachineController.Author { get { return "ass"; } }
+        string IVirtualMachineController.Name { get { return "debug"; } }
+        string IVirtualMachineController.Description { get { return "Debug VM Controller Plugin"; } }
+        string IVirtualMachineController.Author { get { return "kubapolish, modeco80"; } }
 
         private bool started = false;
         private Bitmap map;
@@ -45,6 +45,11 @@ namespace DebugPlugin
             ((IVirtualMachineController)this).Start();
         }
 
+        void IVirtualMachineController.ForceDisplayUpdate()
+        {
+            OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map, x = 0, y = 0, width = 800, height = 600 });
+        }
+
         // Control functions
         void IVirtualMachineController.SendKey(int keysym)
         {
@@ -55,7 +60,14 @@ namespace DebugPlugin
         void IVirtualMachineController.SendMouse(int x, int y, int ms)
         {
             g.FillRectangle(Brushes.Black, x - 1, y - 1, 3, 3);
-            OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map, x = 0, y = 0, width = 800, height = 600 });
+            try
+            {
+                OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map.Clone(new Rectangle(x - 1, y - 1, 3, 3), map.PixelFormat), x = x - 1, y = y - 1, width = 3, height = 3 });
+            }
+            catch
+            {
+                Console.Write("\nlol d'oops!\n");
+            }
         }
 
         protected void OnDisplayUpdate(DisplayUpdateArgs e)

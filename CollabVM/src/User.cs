@@ -36,6 +36,8 @@ namespace CollabVM
     public class Action
     {
         public string[] inst;
+
+        public byte[] binaryData;
     }
 
     // User data, contains socket handle and virtual machine user is looking at.
@@ -47,6 +49,7 @@ namespace CollabVM
         public string username = "";
 
         public bool connected = false;
+        public bool freshConnection = true;
 
         // If connected is false this should always be expected to be null.
         // Otherwise the VM the user is on is here.

@@ -16,6 +16,7 @@ namespace CollabVM
         private List<User> users;
         private Dictionary<string, VirtualMachine> virtualMachines;
         private System.Timers.Timer serverTimer;
+        private object VMLock = new object();
 
         public WSBehavior(Dictionary<string, VirtualMachine> vms)
         {
@@ -72,15 +73,35 @@ namespace CollabVM
                 {
                     Action act = u.ActionQueue.Dequeue();
                     if (act == null) break;
-                    if (act.inst == null) break;
-                    u.sockhandle.Send(ProtocolCodec.Encode(act.inst));
+                    if(act.binaryData == null)
+                    {
+                        if (act.inst == null) continue;
+                        u.sockhandle.Send(ProtocolCodec.Encode(act.inst));
+                    } else
+                    {
+                        u.sockhandle.Send(act.binaryData);
+                    }
+                    
                 }
             }
         }
 
         private void OnWS(User u, string message)
         {
-
+            string[] decoded = ProtocolCodec.Decode(message);
+            switch (decoded[0])
+            {
+                default:break;
+                case "mouse":
+                {
+                        if (u.vm == null || u.connected == false) break;
+                       
+                        lock (VMLock)
+                        {
+                            u.vm.MouseMove(int.Parse(decoded[1]), int.Parse(decoded[2]));
+                        }
+                } break;
+            }
 
         }
 
@@ -90,10 +111,7 @@ namespace CollabVM
             User u = GetUserFromID(ID);
             if (u != null)
             {
-                new Thread(() =>
-                {
-                    OnWS(u, e.Data);
-                }).Start();
+              OnWS(u, e.Data);
             }
         }
 
@@ -111,6 +129,7 @@ namespace CollabVM
             users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
             Logger.Log($"[ IP {GetUserFromID(ID).ipi.GetIP()} ] Connection opened");
             // TODO: we might want to send a hello packet too
+            this.virtualMachines["test"].ConnectUser(GetUserFromID(ID));
         }
     }
 }

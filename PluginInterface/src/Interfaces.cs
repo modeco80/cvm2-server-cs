@@ -53,6 +53,7 @@ namespace PluginInterface
         void Stop();
         void Restore();
 
+        void ForceDisplayUpdate();
         void SendKey(int keysym);
         void SendMouse(int x, int y, int ms);
 
