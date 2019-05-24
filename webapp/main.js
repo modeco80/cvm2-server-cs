@@ -13,6 +13,7 @@ function InitClient() {
 }
 
 (function () {
+	// loads js dynamically without jquery
 	function LoadJS(path, loadedCallback) {
 		var script = document.createElement('script');
 		script.onload = function () {
@@ -24,13 +25,13 @@ function InitClient() {
 	}
 
     // Initalize client
-	window.DebugLog("Ldr", "Loading JS files required for the client");
+	window.DebugLog("Client", "Loading JS files required for the client");
 
     LoadJS("js/instc.js", () => {
-        window.DebugLog("Ldr", "instc.js loaded");
+        window.DebugLog("Client", "instc.js loaded");
 		
         LoadJS("js/socket.js", () => {
-            window.DebugLog("Ldr", "socket.js loaded, initalizing client");
+            window.DebugLog("Client", "socket.js loaded, initalizing client");
             InitClient();
         });
 		
@@ -47,5 +48,6 @@ function canvasMove(e) {
         };
     }
     var pos = getMousePos(document.getElementById("screen"), e);
-    window.CollabSocket.sendMessage(["mouse", pos.x.toString(), pos.y.toString(), '0']);
+	console.log(e);
+    window.CollabSocket.sendMessage(["mouse", pos.x.toString(), pos.y.toString(), e.buttons.toString()]);
 }

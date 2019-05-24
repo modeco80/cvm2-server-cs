@@ -18,10 +18,11 @@ window.CollabSocket = {
 		ws.binaryType = 'arraybuffer';
 		
 		ws.onmessage = (message) => {
+			
 			window.DebugLog("Socket", "Message recieved");
 			if(expectingDisplayBytes == false) {
 			    if (typeof (message.data) === "string") {
-			        // Short circuit to Guacamole path again
+			        // decode Guacamole message
 			        DecodeInstruction(message);
 			    }
 
@@ -33,9 +34,7 @@ window.CollabSocket = {
 				}
 				
 				window.DebugLog("Socket", "Recieved binary message whilist waiting for display");
-				
 				if (expectedDisplayRect == null) return;
-				
 				
 			    // attempt to draw the image
 				canvas = document.getElementById("screen");
@@ -66,7 +65,7 @@ window.CollabSocket = {
 		
 	},
 	
-    sendMessage: (ToEncode) => {
+	sendMessage: (ToEncode) => {
 		ws.send(window.InstCodec.encode(ToEncode));
 	}
 };
@@ -75,7 +74,7 @@ function DecodeInstruction(message){
 	    var decoded = window.InstCodec.decode(message.data);
 		switch (decoded[0]) {
 			default: break;
-            case "rect": {
+			case "rect": {
 				// Set everything up to expect a
 				// binary PNG message.
 				expectingDisplayBytes = true;
