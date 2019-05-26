@@ -64,7 +64,6 @@ namespace CollabVM
                         catch
                         {
                             Logger.Log("Error attempting to load plugin.", Logger.Severity.Error);
-
                         }
                     }
                 }

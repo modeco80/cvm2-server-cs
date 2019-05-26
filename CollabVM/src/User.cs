@@ -68,4 +68,22 @@ namespace CollabVM
         }
 
     }
+
+    // Management Panel user.
+    // Unfinished and unused for now
+    public class PanelUser
+    {
+        public string id;
+        public IPInfo ipi;
+        public WebSocket socket;
+
+        public PanelUser(string id, IPAddress ip, WebSocket sock)
+        {
+            ipi = new IPInfo(ip);
+            this.id = id;
+            socket = sock;
+
+        }
+
+    }
 }

@@ -10,19 +10,28 @@ using WebSocketSharp.Server;
 
 namespace CollabVM
 {
-    // The WebSocket server behavior
-    class WSBehavior : WebSocketBehavior
+
+    public class ServerGlobals
     {
-        private List<User> users;
-        private Dictionary<string, VirtualMachine> virtualMachines;
+        public static List<User> users = new List<User>();
+        public static Dictionary<string, VirtualMachine> virtualMachines;
+        
+        // Get a user from a WebSocket id.
+        public static User GetUserFromID(string id)
+        {
+            return users.Find(x => x.id == id);
+        }
+    }
+
+    // The WebSocket server behavior
+    class VMServerBehaviour : WebSocketBehavior
+    {
+        
         private System.Timers.Timer serverTimer;
         private object VMLock = new object();
 
-        public WSBehavior(Dictionary<string, VirtualMachine> vms)
+        public VMServerBehaviour()
         {
-            users = new List<User>();
-            virtualMachines = vms;
-
             serverTimer = new System.Timers.Timer(150);
             serverTimer.Elapsed += (src, e) =>
             {
@@ -37,36 +46,30 @@ namespace CollabVM
 
         }
 
-        // Get a user from a WebSocket id.
-        private User GetUserFromID(string id)
-        {
-            return users.Find(x => x.id == id);
-        }
-
         // Right now this function just cleans up *our* user pool.
         // Later we'll need to remove stuff from virtual machines in order
         // to stop the chance of nullrefs
         private void CleanupUser(string id)
         {
-            /*
-                foreach(KeyValuePair<string,VirtualMachine> v in virtualMachines){
-                    VirtualMachine vm = v.Value;
-                    if(vm == GetUserFromID(ID).vm) vm.DisconnectUser(GetUserFromID(ID));
-                 }
-            */
-            users.RemoveAll(pool => pool == GetUserFromID(ID));
+           
+           foreach(KeyValuePair<string,VirtualMachine> v in ServerGlobals.virtualMachines)
+           {
+              VirtualMachine vm = v.Value;
+              if(vm == ServerGlobals.GetUserFromID(ID).vm) vm.DisconnectUser(ServerGlobals.GetUserFromID(ID));
+           }
+            ServerGlobals.users.RemoveAll(pool => pool == ServerGlobals.GetUserFromID(ID));
         }
 
         protected override void OnClose(CloseEventArgs e)
         {
-            Logger.Log($"[ IP {GetUserFromID(ID).ipi.GetIP()} ] Connection closed");
+            Logger.Log($"[ IP {ServerGlobals.GetUserFromID(ID).ipi.GetIP()} ] Connection closed");
             CleanupUser(ID);
         }
 
         // This function processes the action queue for all connected users.
         private void ActionWork()
         {
-            foreach (User u in users)
+            foreach (User u in ServerGlobals.users)
             {
                 // Process the action queue if it's not blank.
                 while (u.ActionQueue.Count != 0)
@@ -108,7 +111,7 @@ namespace CollabVM
         // Fired on a WebSocket message.
         protected override void OnMessage(MessageEventArgs e)
         {
-            User u = GetUserFromID(ID);
+            User u = ServerGlobals.GetUserFromID(ID);
             if (u != null)
             {
               OnWS(u, e.Data);
@@ -125,11 +128,11 @@ namespace CollabVM
                 return;
             }
 
+            ServerGlobals.users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
+            Logger.Log($"[ IP {ServerGlobals.GetUserFromID(ID).ipi.GetIP()} ] Connection opened");
 
-            users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
-            Logger.Log($"[ IP {GetUserFromID(ID).ipi.GetIP()} ] Connection opened");
-            // TODO: we might want to send a hello packet too
-            this.virtualMachines["test"].ConnectUser(GetUserFromID(ID));
+            // test code
+            ServerGlobals.virtualMachines["test"].ConnectUser(ServerGlobals.GetUserFromID(ID));
         }
     }
 }

@@ -30,6 +30,21 @@ namespace PluginInterface
         // TODO: handle other thingys
     }
 
+    public enum PanelItemType
+    {
+       Boolean,
+       TextInput
+    }
+
+    public class PanelItem
+    {
+        public PanelItemType type;
+        public string description;
+
+        public bool bval;
+        public string sval;
+    }
+
     public enum MouseStates
     {
         Nop,
@@ -46,7 +61,7 @@ namespace PluginInterface
         string Name { get; } // Ex.: QEMU
         string Description { get; } // Ex.: QEMU Virtual Machine Plugin
         string Author { get; } //Ex.: modeco80
-
+        //Dictionary<string, PanelItem> PanelItems { get; }
 
         void Start();
         bool IsStarted();
@@ -58,5 +73,7 @@ namespace PluginInterface
         void SendMouse(int x, int y, int ms);
 
         event EventHandler<DisplayUpdateArgs> DisplayUpdate;
+
+        
     }
 }

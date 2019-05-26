@@ -41,13 +41,17 @@ namespace CollabVM
         public void Start()
         {
             Logger.Log("Server: Starting the server on :" + this.config.port + "...");
-            // TODO: do thing and thingy thongy
-            //       translation: "make virtual machines from config file"
+
             this.config.vms["test"] = new VirtualMachine(this.MachineContollers["debug"], "test");
+           
+            ServerGlobals.virtualMachines = this.config.vms;
             WebSocketServer ws = new WebSocketServer(this.config.port);
+
             ws.Log.Level = LogLevel.Error;
-            ws.AddWebSocketService("/", () => new WSBehavior(this.config.vms) { Protocol = "cvm2", IgnoreExtensions = true });
+            ws.AddWebSocketService("/", () => new VMServerBehaviour() { Protocol = "cvm2", IgnoreExtensions = true });
+
             this.config.vms["test"].Start();
+
             ws.Start();
 
             while (ws.IsListening)
