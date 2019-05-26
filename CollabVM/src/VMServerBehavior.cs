@@ -3,10 +3,13 @@ using System.Timers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace CollabVM
 {
@@ -46,23 +49,20 @@ namespace CollabVM
 
         }
 
-        // Right now this function just cleans up *our* user pool.
-        // Later we'll need to remove stuff from virtual machines in order
-        // to stop the chance of nullrefs
         private void CleanupUser(string id)
         {
            
-           foreach(KeyValuePair<string,VirtualMachine> v in ServerGlobals.virtualMachines)
+           foreach(VirtualMachine vm in ServerGlobals.virtualMachines.Values)
            {
-              VirtualMachine vm = v.Value;
-              if(vm == ServerGlobals.GetUserFromID(ID).vm) vm.DisconnectUser(ServerGlobals.GetUserFromID(ID));
+              if(vm.id == ServerGlobals.GetUserFromID(ID).vm.id) vm.DisconnectUser(ServerGlobals.GetUserFromID(ID));
            }
-            ServerGlobals.users.RemoveAll(pool => pool == ServerGlobals.GetUserFromID(ID));
+
+           ServerGlobals.users.RemoveAll(pool => pool == ServerGlobals.GetUserFromID(ID));
         }
 
         protected override void OnClose(CloseEventArgs e)
         {
-            Logger.Log($"[ IP {ServerGlobals.GetUserFromID(ID).ipi.GetIP()} ] Connection closed");
+            Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection closed");
             CleanupUser(ID);
         }
 
@@ -89,12 +89,38 @@ namespace CollabVM
             }
         }
 
+        private static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
         private void OnWS(User u, string message)
         {
             string[] decoded = ProtocolCodec.Decode(message);
             switch (decoded[0])
             {
                 default:break;
+
                 case "mouse":
                 {
                         if (u.vm == null || u.connected == false) break;
@@ -104,6 +130,42 @@ namespace CollabVM
                             u.vm.MouseMove(int.Parse(decoded[1]), int.Parse(decoded[2]));
                         }
                 } break;
+
+                case "connect":
+                    lock (VMLock)
+                    {
+                        if (!u.connected)
+                        {
+                            // Bad but unless you have 1000 vms it should be alright.
+                            foreach(string id in ServerGlobals.virtualMachines.Keys)
+                            {
+                                if(decoded[1] == id)
+                                {
+                                    Logger.Log(ServerGlobals.GetUserFromID(ID), "Connecting to VM " + id);
+                                    ServerGlobals.virtualMachines[ decoded[1] ].ConnectUser(ServerGlobals.GetUserFromID(ID));
+                                }
+                            }
+                            
+                        }
+                    }
+                break;
+#if false
+                case "list":
+                    if (!u.connected)
+                    {
+                        List<string> vmids = new List<string>();
+                        foreach(string id in ServerGlobals.virtualMachines.Keys)
+                        {
+                            vmids.Add(id);
+                            Bitmap scalene_triangle = ServerGlobals.virtualMachines[id].vmc.GetDisplayBitmap();
+                            Bitmap scaled = ResizeImage(scalene_triangle, 160, 160);
+                            //vmids.Add();
+                            
+                        }
+                        u.ActionQueue.Enqueue(new Action { inst = vmids.ToArray() });
+                    }
+                break;
+#endif
             }
 
         }
@@ -129,10 +191,7 @@ namespace CollabVM
             }
 
             ServerGlobals.users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
-            Logger.Log($"[ IP {ServerGlobals.GetUserFromID(ID).ipi.GetIP()} ] Connection opened");
-
-            // test code
-            ServerGlobals.virtualMachines["test"].ConnectUser(ServerGlobals.GetUserFromID(ID));
+            Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection opened");
         }
     }
 }

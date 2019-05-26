@@ -11,12 +11,16 @@ var expectedDisplayRect = null;
 
 window.CollabSocket = {
 
-    connect: (host) => {
+    connect: (host, opencallback) => {
         window.DebugLog("Socket", "Connecting to " + host);
        
 		ws = new WebSocket("ws://" + host, "cvm2");
 		ws.binaryType = 'arraybuffer';
 		
+		ws.onopen = () => {
+		    opencallback();
+		}
+
 		ws.onmessage = (message) => {
 			
 			window.DebugLog("Socket", "Message recieved");

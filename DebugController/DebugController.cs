@@ -45,6 +45,9 @@ namespace DebugPlugin
             ((IVirtualMachineController)this).Start();
         }
 
+        Bitmap IVirtualMachineController.GetDisplayBitmap() => map;
+
+
         void IVirtualMachineController.ForceDisplayUpdate()
         {
             OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map, x = 0, y = 0, width = 800, height = 600 });
@@ -62,7 +65,7 @@ namespace DebugPlugin
             g.FillRectangle(Brushes.Black, x - 1, y - 1, 3, 3);
             try
             {
-                OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map.Clone(new Rectangle(x - 1, y - 1, 3, 3), map.PixelFormat), x = x - 1, y = y - 1, width = 3, height = 3 });
+                OnDisplayUpdate(new DisplayUpdateArgs() { displayData = map.Clone(new Rectangle(x - 1, y - 1, 3, 3), map.PixelFormat), x = x - 1, y = y - 1, width = 4, height = 4 });
             }
             catch
             {

@@ -68,6 +68,7 @@ namespace PluginInterface
         void Stop();
         void Restore();
 
+        Bitmap GetDisplayBitmap();
         void ForceDisplayUpdate();
         void SendKey(int keysym);
         void SendMouse(int x, int y, int ms);

@@ -13,7 +13,7 @@ namespace CollabVM
     {
         List<User> users = new List<User>(); // All users this VM has.
         public string id { get; set; }
-        private IVirtualMachineController vmc;
+        public IVirtualMachineController vmc;
 
         public VirtualMachine(IVirtualMachineController vmc, string id)
         {

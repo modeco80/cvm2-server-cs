@@ -15,11 +15,19 @@ namespace CollabVM
 
         static void Main(string[] args)
         {
+#if DEBUG
+            Console.Title = $"CollabVM2.Server {ThisAssembly.Git.Commit}";
+#else
+            Console.Title = "CollabVM2.Server";
+#endif
             vms = new Dictionary<string, IVirtualMachineController>();
             LoadPlugins();
-            Logger.Log("CollabVM Server 2.0, (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
-            Logger.Log("Initalizing VM Controller plugins...");
-            // TODO: load configuration
+
+#if DEBUG
+            Logger.Log($"CollabVM2.Server {ThisAssembly.Git.Commit} (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
+#else
+            Logger.Log("CollabVM2.Server (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
+#endif
             Logger.Log("Initalizing server...");
             Server srv = new Server(vms, new ServerConfig(9090)); // TODO
             srv.Start();
