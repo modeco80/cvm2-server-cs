@@ -66,7 +66,7 @@ namespace CollabVM
             CleanupUser(ID);
         }
 
-        // This function processes the action queue for all connected users.
+        // This function processes the action queue for all connected users when they have one.
         private void ActionWork()
         {
             foreach (User u in ServerGlobals.users)
@@ -79,10 +79,10 @@ namespace CollabVM
                     if(act.binaryData == null)
                     {
                         if (act.inst == null) continue;
-                        u.sockhandle.Send(ProtocolCodec.Encode(act.inst));
+                        u.Socket.Send(ProtocolCodec.Encode(act.inst));
                     } else
                     {
-                        u.sockhandle.Send(act.binaryData);
+                        u.Socket.Send(act.binaryData);
                     }
                     
                 }
@@ -117,6 +117,8 @@ namespace CollabVM
         private void OnWS(User u, string message)
         {
             string[] decoded = ProtocolCodec.Decode(message);
+            if (decoded == null) return;
+
             switch (decoded[0])
             {
                 default:break;

@@ -29,7 +29,7 @@ namespace CollabVM
             this.ip = ip;
         }
 
-        public string GetIP() => this.ip.ToString();
+        public override string ToString() => this.ip.ToString();
     }
 
     // Action data
@@ -43,10 +43,10 @@ namespace CollabVM
     // User data, contains socket handle and virtual machine user is looking at.
     public class User
     {
-        public IPInfo ipi;
-        public WebSocket sockhandle;
-        public string id;
-        public string username = "";
+        public IPInfo IpInfo { get; set; }
+        public WebSocket Socket;
+        public string Id { get; set; }
+        public string Username { get; set; }
 
         public bool connected = false;
         public bool freshConnection = true;
@@ -61,9 +61,9 @@ namespace CollabVM
 
         public User(string id, IPAddress ip, WebSocket sock)
         {
-            ipi = new IPInfo(ip);
-            this.id = id;
-            sockhandle = sock;
+            IpInfo = new IPInfo(ip);
+            this.Id = id;
+            Socket = sock;
 
         }
 

@@ -33,18 +33,26 @@ namespace CollabVM
                 if (len == -1)
                     break;
 
-                pos = int.Parse(str.Substring(pos + 1, len - (pos + 1))) + len + 1;
-                StringBuilder repl = new StringBuilder(str.Substring(len + 1, pos - (len + 1)));
-                repl.Replace("&#x27;", "'")
-                    .Replace("&quot;", "\"")
-                    .Replace("&#x2F;", "/")
-                    .Replace("&lt;", "<")
-                    .Replace("&gt;", ">")
-                    .Replace("&amp;", "&");
-                sections.Add(repl.ToString());
+                try
+                {
+                    pos = int.Parse(str.Substring(pos + 1, len - (pos + 1))) + len + 1;
+                    StringBuilder repl = new StringBuilder(str.Substring(len + 1, pos - (len + 1)));
+                    repl.Replace("&#x27;", "'")
+                        .Replace("&quot;", "\"")
+                        .Replace("&#x2F;", "/")
+                        .Replace("&lt;", "<")
+                        .Replace("&gt;", ">")
+                        .Replace("&amp;", "&");
+                    sections.Add(repl.ToString());
+                
 
-                if (str.Substring(pos, 1) == ";")
-                    break;
+                    if (str.Substring(pos, 1) == ";")
+                         break;
+                }
+                catch
+                {
+                    return null;
+                }
             }
             return sections.ToArray();
         }

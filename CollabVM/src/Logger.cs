@@ -56,12 +56,12 @@ namespace CollabVM
 
         public static void Log(User u, string message)
         {
-            Console.WriteLine("[ IP {0} ] {1}", u.ipi.GetIP(), message);
+            Console.WriteLine("[ IP {0} ] {1}", u.IpInfo.ToString(), message);
         }
 
         public static void Log(PanelUser u, string message)
         {
-            Console.WriteLine("[ [Managing] IP {0} ] {1}", u.ipi.GetIP(), message);
+            Console.WriteLine("[ [Managing] IP {0} ] {1}", u.ipi.ToString(), message);
         }
     }
 
