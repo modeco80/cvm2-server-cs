@@ -48,7 +48,6 @@
     <ProjectReference Include="..\CollabVM2.Server\CollabVM2.Server.csproj">
       <Project>{ba79e4b4-6ab0-4a27-99bd-b71a05b71230}</Project>
       <Name>CollabVM2.Server</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

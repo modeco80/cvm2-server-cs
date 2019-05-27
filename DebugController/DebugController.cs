@@ -13,7 +13,7 @@ namespace DebugPlugin
     public class DebugController : IVirtualMachineController
     {
         string IVirtualMachineController.Id { get { return "debug"; } }
-        string IVirtualMachineController.Description { get { return "Debug VM Controller Plugin"; } }
+        string IVirtualMachineController.DescribingName { get { return "Debug VM Controller Plugin"; } }
         string IVirtualMachineController.Author { get { return "kubapolish, modeco80"; } }
 
         private bool started = false;

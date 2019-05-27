@@ -50,7 +50,7 @@ namespace CollabVM2.Plugins
     {
         // Human identifiable data
         string Id { get; } // Ex.: QEMU
-        string Description { get; } // Ex.: QEMU Virtual Machine Plugin
+        string DescribingName { get; } // Ex.: QEMU Virtual Machine Plugin
         string Author { get; } //Ex.: modeco80
         //Dictionary<string, PanelItem> PanelItems { get; }
 

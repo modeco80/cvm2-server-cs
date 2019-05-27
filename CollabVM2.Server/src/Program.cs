@@ -67,7 +67,7 @@ namespace CollabVM2.Server
                         try
                         {
                             IVirtualMachineController vm = (IVirtualMachineController)pluginInstance;
-                            Logger.Log("VM Controller Plugin \"" + vm.Description + "\" loaded successfully!");
+                            Logger.Log("VM Controller Plugin \"" + vm.DescribingName + "\" loaded successfully!");
                             return vm;
                         }
                         catch
