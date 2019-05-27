@@ -30,7 +30,7 @@ namespace CollabVM2.Plugins
     public class PanelItem
     {
         public PanelItemType type;
-        public string description;
+        public string Description { get; }
 
         public bool bval;
         public string sval;
@@ -49,7 +49,7 @@ namespace CollabVM2.Plugins
     public interface IVirtualMachineController
     {
         // Human identifiable data
-        string Id { get; } // Ex.: QEMU
+        string Id { get; } // Ex.: qemu
         string DescribingName { get; } // Ex.: QEMU Virtual Machine Plugin
         string Author { get; } //Ex.: modeco80
         //Dictionary<string, PanelItem> PanelItems { get; }

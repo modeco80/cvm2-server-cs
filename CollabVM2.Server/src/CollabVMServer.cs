@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CollabVM2.Plugins;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-
-using Logger = CollabVM2.Utils.Logger;
+using CollabVM2.Plugins;
 
 namespace CollabVM2.Server
 {
@@ -36,13 +34,13 @@ namespace CollabVM2.Server
         {
             this.MachineContollers = controllers;
             this.config = config;
-            Logger.Log("Server: Initalized");
+            Utils.Logger.Log("Server: Initalized");
         }
 
 
         public void Start()
         {
-            Logger.Log("Server: Starting the server on :" + this.config.port + "...");
+            Utils.Logger.Log("Server: Starting the server on :" + this.config.port + "...");
 
             this.config.vms["test"] = new VirtualMachine(this.MachineContollers["debug"], "test");
            

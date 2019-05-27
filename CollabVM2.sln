@@ -9,7 +9,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{621935
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VM Controllers", "VM Controllers", "{E8FCE11E-7C4E-4BC5-AD27-1CA13D87CD42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugPlugin", "DebugController\DebugController.csproj", "{B6A332DB-9543-4100-8230-F7363A6715F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugController", "DebugController\DebugController.csproj", "{B6A332DB-9543-4100-8230-F7363A6715F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Webapp and readme", "Webapp and readme", "{0DF44F8D-445B-41BA-9A51-0D50129E3B25}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Webapp", "Webapp", "{CEA9F921-7DE8-47E9-8CA3-86BEBC96095B}"
+	ProjectSection(SolutionItems) = preProject
+		webapp\index.html = webapp\index.html
+		webapp\main.js = webapp\main.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "js", "js", "{3477A11A-BD2D-4A3D-9412-947CB0011FC0}"
+	ProjectSection(SolutionItems) = preProject
+		webapp\js\instc.js = webapp\js\instc.js
+		webapp\js\socket.js = webapp\js\socket.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +49,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BA79E4B4-6AB0-4A27-99BD-B71A05B71230} = {62193596-43BD-4D36-9086-82CE34941639}
 		{B6A332DB-9543-4100-8230-F7363A6715F6} = {E8FCE11E-7C4E-4BC5-AD27-1CA13D87CD42}
+		{CEA9F921-7DE8-47E9-8CA3-86BEBC96095B} = {0DF44F8D-445B-41BA-9A51-0D50129E3B25}
+		{3477A11A-BD2D-4A3D-9412-947CB0011FC0} = {CEA9F921-7DE8-47E9-8CA3-86BEBC96095B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F214B4DC-9135-45E9-8160-32B5B6E6B378}

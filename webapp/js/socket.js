@@ -20,7 +20,7 @@ window.CollabSocket = {
 		ws.onopen = () => {
 		    opencallback();
 		}
-
+        
 		ws.onmessage = (message) => {
 			
 			window.DebugLog("Socket", "Message recieved");

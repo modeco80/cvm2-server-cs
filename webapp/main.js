@@ -17,33 +17,6 @@ window.DebugLog = (component, message) => {
     
 }
 
-(function () {
-	// loads js dynamically without jquery
-    function LoadJS(path, loadedCallback) {
-		var script = document.createElement('script');
-		script.onload = function () {
-			// called when dep is ready
-			loadedCallback();
-		};
-		script.src = path;
-		document.head.appendChild(script);
-	}
-
-    // Initalize client
-	window.DebugLog("Client", "Loading JS files required for the client");
-
-    LoadJS("js/instc.js", () => {
-        window.DebugLog("Client", "instc.js loaded");
-		
-        LoadJS("js/socket.js", () => {
-            window.DebugLog("Client", "socket.js loaded, initalizing client");
-            InitClient();
-        });
-		
-    });
-
-})();
-
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -58,3 +31,31 @@ function canvasMove(e) {
         window.CollabSocket.sendMessage(["mouse", pos.x.toString(), pos.y.toString(), e.buttons.toString()]);
     }
 }
+
+(function () {
+
+    // loads js dynamically without jquery
+    function LoadJS(path, loadedCallback) {
+        var script = document.createElement('script');
+        script.onload = () => {
+            // called when dep is ready
+            loadedCallback();
+        };
+        script.src = path;
+        document.head.appendChild(script);
+    }
+
+    // Initalize client
+    window.DebugLog("Client", "Loading JS files required for the client");
+
+    LoadJS("js/instc.js", () => {
+        window.DebugLog("Client", "instc.js loaded");
+
+        LoadJS("js/socket.js", () => {
+            window.DebugLog("Client", "socket.js loaded, initalizing client");
+            InitClient();
+        });
+
+    });
+
+})();

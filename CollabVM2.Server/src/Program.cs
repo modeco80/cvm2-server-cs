@@ -16,71 +16,83 @@ namespace CollabVM2.Server
 
         static void Main(string[] args) 
         {
+            #region Logo stuff
 #if DEBUG
             Console.Title = $"CollabVM2.Server {ThisAssembly.Git.Commit}";
 #else
             Console.Title = "CollabVM2.Server";
 #endif
-            vms = new Dictionary<string, IVirtualMachineController>();
-            LoadPlugins();
 
 #if DEBUG
             Logger.Log($"CollabVM2.Server {ThisAssembly.Git.Commit} (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
 #else
             Logger.Log("CollabVM2.Server (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
 #endif
+            #endregion
+            vms = new Dictionary<string, IVirtualMachineController>();
+            LoadAllControllers();
             Logger.Log("Initalizing server...");
             CollabVMServer srv = new CollabVMServer(vms, new ServerConfig(9090)); // TODO
             srv.Start();
         }
 
-        static void LoadPlugins()
+        static void LoadAllControllers()
         {
-            string[] plugins = Directory.GetFiles("plugins/", "*.dll");
-            foreach (string plugin in plugins)
+            string[] controllers = Directory.GetFiles("controllers/", "*.dll");
+            foreach (string controller in controllers)
             {
-                Logger.Log("Attempting to load plugin " + plugin);
-                IVirtualMachineController vm = LoadPlugin(plugin);
+                Logger.Log("Attempting to load controller " + controller);
+                IVirtualMachineController vm = LoadController(controller);
                 if (vm == null)
                 {
-                    Logger.Log("Error loading plugin " + plugin + ", skipping", Logger.Severity.Error);
                     continue; // error loading that plugin; skip list add
                 }
                 vms.Add(vm.Id, vm);
             }
         }
 
-        private static bool IsControllerInterface(Type t) => typeof(IVirtualMachineController).GetTypeInfo().IsAssignableFrom(t.GetTypeInfo());
+        #region Plugin stuff
 
         // Loads a controller plugin.
-        public static IVirtualMachineController LoadPlugin(string pluginPath)
+        public static IVirtualMachineController LoadController(string ControllerAssemblyPath)
         {
-            Assembly pluginAssembly;
+            Assembly ControllerAssembly;
+            IVirtualMachineController vm = null;
+
             try
             {
-                pluginAssembly = Assembly.LoadFrom(pluginPath);
-                foreach (Type t in pluginAssembly.GetTypes())
+                ControllerAssembly = Assembly.LoadFrom(ControllerAssemblyPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error loading controller {ControllerAssemblyPath}", Logger.Severity.Error);
+                Logger.Log($"Exception message: {ex.Message}", Logger.Severity.Error);
+                return null;
+            }
+
+            foreach (Type AssemblyType in ControllerAssembly.GetTypes())
+            {
+                if (typeof(IVirtualMachineController).GetTypeInfo().IsAssignableFrom(AssemblyType.GetTypeInfo()))
                 {
-                    if (IsControllerInterface(t))
+                    object ControllerInstance = Activator.CreateInstance(AssemblyType);
+                    try
                     {
-                        object pluginInstance = Activator.CreateInstance(t);
-                        try
-                        {
-                            IVirtualMachineController vm = (IVirtualMachineController)pluginInstance;
-                            Logger.Log("VM Controller Plugin \"" + vm.DescribingName + "\" loaded successfully!");
-                            return vm;
-                        }
-                        catch
-                        {
-                            Logger.Log("Error attempting to load plugin.", Logger.Severity.Error);
-                        }
+                        vm = (IVirtualMachineController)ControllerInstance;
+                        Logger.Log("VM Controller \"" + vm.DescribingName + "\" loaded successfully!");
                     }
+                    catch (Exception ex)
+                    {
+                        Logger.Log($"Error loading controller {ControllerAssemblyPath}", Logger.Severity.Error);
+                        Logger.Log($"Exception message: {ex.Message}", Logger.Severity.Error);
+                        return null;
+                    }
+                    return vm;
                 }
             }
-            catch { }
+            
             // Return a nullref if there is an error.
             return null;
         }
-
+        #endregion
     }
 }
