@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CollabVM Server")]
+[assembly: AssemblyTitle("CollabVM 2 Server")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CollabVM Server")]
+[assembly: AssemblyProduct("CollabVM 2 Server")]
 [assembly: AssemblyCopyright("Copyright © 2019 Computernewb Development Team")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

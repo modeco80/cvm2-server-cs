@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PluginInterface;
+using CollabVM2.Plugins;
+using CollabVM2.Utils;
 using System.Reflection;
 
-namespace CollabVM
+namespace CollabVM2.Server
 {
     class Program
     {
         private static Dictionary<string, IVirtualMachineController> vms;
 
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
 #if DEBUG
             Console.Title = $"CollabVM2.Server {ThisAssembly.Git.Commit}";
@@ -29,7 +30,7 @@ namespace CollabVM
             Logger.Log("CollabVM2.Server (C) 2019 Computernewb Development Team.", Logger.Severity.Logo);
 #endif
             Logger.Log("Initalizing server...");
-            Server srv = new Server(vms, new ServerConfig(9090)); // TODO
+            CollabVMServer srv = new CollabVMServer(vms, new ServerConfig(9090)); // TODO
             srv.Start();
         }
 
@@ -45,7 +46,7 @@ namespace CollabVM
                     Logger.Log("Error loading plugin " + plugin + ", skipping", Logger.Severity.Error);
                     continue; // error loading that plugin; skip list add
                 }
-                vms.Add(vm.Name, vm);
+                vms.Add(vm.Id, vm);
             }
         }
 

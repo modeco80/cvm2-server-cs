@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PluginInterface;
+using CollabVM2.Plugins;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace CollabVM
+using Logger = CollabVM2.Utils.Logger;
+
+namespace CollabVM2.Server
 {
 
     // Server configuration data
@@ -24,13 +26,13 @@ namespace CollabVM
     }
 
     // The server class.
-    class Server
+    class CollabVMServer
     {
 
         private Dictionary<string, IVirtualMachineController> MachineContollers;
         private ServerConfig config;
 
-        public Server(Dictionary<string, IVirtualMachineController> controllers, ServerConfig config)
+        public CollabVMServer(Dictionary<string, IVirtualMachineController> controllers, ServerConfig config)
         {
             this.MachineContollers = controllers;
             this.config = config;

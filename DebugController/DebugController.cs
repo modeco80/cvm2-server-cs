@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using PluginInterface;
+using CollabVM2.Plugins;
+using CollabVM2.Utils;
+
 
 namespace DebugPlugin
 {
     public class DebugController : IVirtualMachineController
     {
-        string IVirtualMachineController.Name { get { return "debug"; } }
+        string IVirtualMachineController.Id { get { return "debug"; } }
         string IVirtualMachineController.Description { get { return "Debug VM Controller Plugin"; } }
         string IVirtualMachineController.Author { get { return "kubapolish, modeco80"; } }
 
@@ -69,7 +71,7 @@ namespace DebugPlugin
             }
             catch
             {
-                Console.Write("\nlol d'oops!\n");
+                Logger.Log("Oops", Logger.Severity.Error);
             }
         }
 

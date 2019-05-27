@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CollabVM2.Server;
 
-namespace CollabVM
+namespace CollabVM2.Utils
 {
-    class Logger
+    public class Logger
     {
 
         public enum Severity

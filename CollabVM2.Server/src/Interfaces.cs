@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Threading.Tasks;
 
-namespace PluginInterface
+namespace CollabVM2.Plugins
 {
     public class DisplayUpdateArgs
     {
@@ -19,15 +19,6 @@ namespace PluginInterface
 
         // Chunk's bitmap data
         public Bitmap displayData;
-    }
-
-    public class ConfigInfo
-    {
-        #region vnc 
-        public string VNCAddress = "";
-        public string VNCPasswd = "";
-        #endregion
-        // TODO: handle other thingys
     }
 
     public enum PanelItemType
@@ -58,7 +49,7 @@ namespace PluginInterface
     public interface IVirtualMachineController
     {
         // Human identifiable data
-        string Name { get; } // Ex.: QEMU
+        string Id { get; } // Ex.: QEMU
         string Description { get; } // Ex.: QEMU Virtual Machine Plugin
         string Author { get; } //Ex.: modeco80
         //Dictionary<string, PanelItem> PanelItems { get; }

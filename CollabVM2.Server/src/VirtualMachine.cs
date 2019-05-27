@@ -3,9 +3,9 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
-using PluginInterface;
+using CollabVM2.Plugins;
 
-namespace CollabVM
+namespace CollabVM2.Server
 {
 
     // A repressentation of a virtual machine.
@@ -24,7 +24,7 @@ namespace CollabVM
 
         private User GetUserFromName(string name)
         {
-            return users.Find(x => x.username == name);
+            return users.Find(x => x.Username == name);
         }
 
         private User GetUserFromUser(User u)
@@ -35,19 +35,19 @@ namespace CollabVM
         // Starts this VM.
         public void Start()
         {
-            Logger.Log("VirtualMachine: Starting VM id " + id);
+            Utils.Logger.Log("VirtualMachine: Starting VM id " + id);
             vmc.Start();
         }
 
         public void Stop()
         {
-            Logger.Log("VirtualMachine: Stopping VM id " + id);
+            Utils.Logger.Log("VirtualMachine: Stopping VM id " + id);
             vmc.Stop();
         }
 
         public void Reset()
         {
-            Logger.Log("VirtualMachine: Resetting VM id " + id);
+            Utils.Logger.Log("VirtualMachine: Resetting VM id " + id);
             vmc.Restore();
         }
 

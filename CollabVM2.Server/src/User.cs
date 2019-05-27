@@ -8,7 +8,7 @@ using WebSocketSharp;
 using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 
-namespace CollabVM
+namespace CollabVM2.Server
 {
     // The possible choices for a vote.
     public enum VoteChoices
@@ -69,6 +69,12 @@ namespace CollabVM
 
     }
 
+    public enum PanelUserType
+    {
+        Mod,
+        Admin
+    }
+
     // Management Panel user.
     // Unfinished and unused for now
     public class PanelUser
@@ -76,6 +82,7 @@ namespace CollabVM
         public string id;
         public IPInfo ipi;
         public WebSocket socket;
+        public PanelUserType Rank;
 
         public PanelUser(string id, IPAddress ip, WebSocket sock)
         {

@@ -11,7 +11,9 @@ using WebSocketSharp.Server;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace CollabVM
+using CollabVM2.Utils;
+
+namespace CollabVM2.Server
 {
 
     public class ServerGlobals
@@ -22,7 +24,7 @@ namespace CollabVM
         // Get a user from a WebSocket id.
         public static User GetUserFromID(string id)
         {
-            return users.Find(x => x.id == id);
+            return users.Find(x => x.Id == id);
         }
     }
 
@@ -62,7 +64,7 @@ namespace CollabVM
 
         protected override void OnClose(CloseEventArgs e)
         {
-            Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection closed");
+            Utils.Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection closed");
             CleanupUser(ID);
         }
 
@@ -143,7 +145,7 @@ namespace CollabVM
                             {
                                 if(decoded[1] == id)
                                 {
-                                    Logger.Log(ServerGlobals.GetUserFromID(ID), "Connecting to VM " + id);
+                                    Utils.Logger.Log(ServerGlobals.GetUserFromID(ID), "Connecting to VM " + id);
                                     ServerGlobals.virtualMachines[ decoded[1] ].ConnectUser(ServerGlobals.GetUserFromID(ID));
                                 }
                             }
@@ -193,7 +195,7 @@ namespace CollabVM
             }
 
             ServerGlobals.users.Add(new User(ID, Context.UserEndPoint.Address, Context.WebSocket));
-            Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection opened");
+            Utils.Logger.Log(ServerGlobals.GetUserFromID(ID), "Connection opened");
         }
     }
 }

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BA79E4B4-6AB0-4A27-99BD-B71A05B71230}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CollabVM</RootNamespace>
+    <RootNamespace>CollabVM2.Server</RootNamespace>
     <AssemblyName>CollabVM2.Server</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,6 +52,9 @@
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>CollabVM2.Server.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,7 +70,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Logger.cs" />
+    <Compile Include="src\Interfaces.cs" />
+    <Compile Include="src\Utils.cs" />
     <Compile Include="src\User.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,12 +94,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PluginInterface\PluginInterface.csproj">
-      <Project>{e640074b-d276-44fa-99ac-7aa54f1c3934}</Project>
-      <Name>PluginInterface</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />

@@ -6,16 +6,16 @@ The collab-vm-server allows users to collaboratively take turns using a Virtual 
 
 
 ### Visual Studio
-Open `CollabVM.sln` in VS.
+Open `CollabVM2.sln` in VS.
 
-Build the `CollabVM` and `DebugPlugin` projects.
+Build the `CollabVM2.Server` and `DebugController` projects.
 
 Make a `plugins` directory in the binary folder, and copy DebugPlugin.dll to it
 
 ### MonoDevelop
-Open `CollabVM.sln` in MonoDevelop.
+Open `CollabVM2.sln` in MonoDevelop.
 
-Build the `CollabVM` and `DebugPlugin` projects.
+Build the `CollabVM2.Server` and `DebugController` projects.
 
 Make a `plugins` directory in the binary folder, and copy DebugPlugin.dll to it
 

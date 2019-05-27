@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CollabVM
+namespace CollabVM2.Server
 {
 
     static class ProtocolCodec
