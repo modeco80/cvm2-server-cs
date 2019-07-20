@@ -2,6 +2,8 @@
 
 The collab-vm-server allows users to collaboratively take turns using a Virtual Machine.
 
+**THIS REPOSITORY IS LEFT ONLY FOR HISTORICAL SIGNIFICANCE, DO NOT USE IT**
+
 ## Building
 
 
